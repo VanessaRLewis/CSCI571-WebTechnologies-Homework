@@ -1,0 +1,107 @@
+<Listings>
+   <Listing>
+      <Location>
+         <StreetAddress>3360 Beethoven St</StreetAddress>
+         <City>Los Angeles</City>
+         <State>CA</State>
+         <Zip>90066</Zip>
+         <Lat> 34.008659</Lat>
+         <Long> -118.447723</Long>
+      </Location>
+      <ListingDetails>
+         <Status>Active</Status>
+         <Price>2195000</Price>
+         <ListingUrl>http://www.realtor.com/realestateandhomes-detail/3360-Beethoven-St_Los-Angeles_CA_90066_M19165-13643?source=web</ListingUrl>
+         <Image>beethoven.jpg</Image>
+      </ListingDetails>
+   </Listing>
+   <Listing>
+       <Location>
+         <StreetAddress>8251 Billowvista Dr</StreetAddress>
+         <City>Playa Del Rey</City>
+         <State>CA</State>
+         <Zip>90293</Zip>
+         <Lat> 33.9586759</Lat>
+         <Long> -118.440764</Long>
+      </Location>
+      <ListingDetails>
+         <Status>Active</Status>
+         <Price>974000</Price>
+         <ListingUrl>http://www.realtor.com/realestateandhomes-detail/8251-Billowvista-Dr_Playa-Del-Rey_CA_90293_M17774-85784?row=13</ListingUrl>
+         <Image>billowvista.jpg</Image>
+      </ListingDetails>
+   </Listing>
+   <Listing>
+       <Location>
+         <StreetAddress>1750 Walgrove Ave</StreetAddress>
+         <City>Los Angeles</City>
+         <State>CA</State>
+         <Zip>90066</Zip>
+         <Lat> 34.004688</Lat>
+         <Long> -118.451749</Long>
+      </Location>
+      <ListingDetails>
+         <Status>Active</Status>
+         <Price>1250000</Price>
+         <ListingUrl>http://www.realtor.com/realestateandhomes-detail/1750-Walgrove-Ave_Los-Angeles_CA_90066_M20002-87482?source=web</ListingUrl>
+         <Image>walgrove.jpg</Image>
+      </ListingDetails>
+   </Listing>
+<Listing>
+       <Location>
+         <StreetAddress>7840 W 81st St</StreetAddress>
+         <City>Playa Del Rey</City>
+         <State>CA</State>
+         <Zip>90293</Zip>
+         <Lat> 33.961623</Lat>
+         <Long> -118.433202</Long>
+      </Location>
+      <ListingDetails>
+         <Status>Active</Status>
+         <Price>1450000</Price>
+         <ListingUrl>http://www.realtor.com/realestateandhomes-detail/7840-W-81st-St_Playa-Del-Rey_CA_90293_M17696-22670?row=16</ListingUrl>
+         <Image>81st.jpg</Image>
+      </ListingDetails>
+   </Listing>
+<Listing>
+       <Location>
+         <StreetAddress>670 W Maple Ave</StreetAddress>
+         <City>El Segundo</City>
+         <State>CA</State>
+         <Zip>90245</Zip>
+         <Lat> 33.926678</Lat>
+         <Long> -118.424556</Long>
+      </Location>
+      <ListingDetails>
+         <Status>Active</Status>
+         <Price>2149000</Price>
+         <ListingUrl>http://www.realtor.com/realestateandhomes-detail/670-W-Maple-Ave_El-Segundo_CA_90245_M21410-63692</ListingUrl>
+         <Image>maple.jpg</Image>
+      </ListingDetails>
+   </Listing>
+<Listing>
+       <Location>
+         <StreetAddress>1421 E Sycamore Ave</StreetAddress>
+         <City>El Segundo</City>
+         <State>CA</State>
+         <Zip>90245</Zip>
+         <Lat> 	33.928325</Lat>
+         <Long> -118.40079600000001</Long>
+      </Location>
+      <ListingDetails>
+         <Status>Active</Status>
+         <Price>1649900</Price>
+         <ListingUrl>http://www.realtor.com/realestateandhomes-detail/1421-E-Sycamore-Ave_El-Segundo_CA_90245_M24945-31156</ListingUrl>
+         <Image>sycamore.jpg</Image>
+      </ListingDetails>
+   
+</Listings>
+
+
+
+
+
+
+
+
+

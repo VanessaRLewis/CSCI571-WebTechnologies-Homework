@@ -1,0 +1,473 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HW8</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+     <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+   
+    <style type="text/css">
+        
+        body
+        {
+            background-image:url(http://www.neovisual.cz/files/V0779-d9.jpg);
+            background-size:cover;
+            background-repeat: no-repeat;
+        }
+        
+        #formdiv
+        {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        
+        label
+        { color:orange;
+           
+        }
+        
+        .form-group
+        {margin-left: 5px;}
+        
+        #submit
+        {padding: 10px; }
+        
+        #subbtn
+        {padding-left: 15px; }
+        
+        errorElement
+        {color: red;
+        text-align: right;}
+        
+        .error
+        {
+            color:red;
+            text-align: right;
+        }
+        
+        .form-inline .form-group 
+        {vertical-align: top;}
+        
+        h4
+        {
+            color: red;
+            text-align: center;
+        }
+        
+        #Datae
+        {
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        
+        .nav-tabs>li>a
+        { 
+            background-color: orange;
+            border-color: orange;
+            color:white;
+            opacity: 0.8;
+        }
+        
+        .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus 
+        {
+            background-color: white;
+            border: 1px solid orange;
+            opacity:1;
+        }
+        
+        .orlink
+        {color: orange;}
+        
+        #share_button
+        {
+            height: 25px;
+            width: 100px;
+        }
+        
+        .r
+        {text-align:right;}
+        
+        .table-responsive
+        {border:1px solid white;
+        border-top-color: orange;}
+        
+         #carousel-example-generic
+        {
+            border:1px solid white;
+            border-top-color: orange;
+        }
+       
+                
+        .carousel-inner
+        {overflow: hidden;}
+        
+        
+        .carousel-indicators
+        { text-align: right;
+            left: 57%;}
+        
+        .carousel-indicators .active
+        { background-color: orange;} 
+        
+        .carousel-indicators li
+        {border: 1px solid orange;}
+        
+        .carousel-caption
+        {
+            background-color: grey;
+            text-align: left;
+            opacity: 0.60;
+            bottom: 0;
+            left: 0;
+            padding-bottom: 0;
+            padding-left: 20px;
+            padding-top: 0;
+            position: absolute;
+            right: 0;
+        }
+        
+        h3
+        {
+            margin-bottom: 1px;
+            margin-top: 5px;
+        }
+        
+        p 
+        {margin: 0 0 17px;}
+
+           
+    </style>
+    
+   <script type="text/javascript">
+       
+       var addr="";
+       var desc="";
+       var chart="";
+       var homedetails="";
+       
+       $(document).ready(function(){
+           
+           //$("#Error_Output").hide();
+            /*jQuery Validation*/
+           $("#houseform").validate({
+               rules:
+               {
+                   streetInput: {required: true,},
+                   cityInput: {required: true,},
+                   stateInput: {required: true,}
+               },// end rules
+               
+            highlight: function(element)
+               {$(element).closest('.form-group').addClass('has-error');},
+            unhighlight: function(element)
+               {$(element).closest('.form-group').removeClass('has-error');},
+               
+            errorElement: 'div',
+            submitHandler: function(form) 
+            {
+           
+                var streetInput = $('#streetInput').val();
+                var cityInput = $('#cityInput').val();
+                var stateInput = $('#stateInput').val();
+
+                $.ajax({
+                    url: 'http://lewisvhw7-env.elasticbeanstalk.com',
+                    // this is the parameter list
+                    data: 
+                    { streetInput: streetInput,
+                      cityInput: cityInput,
+                      stateInput:stateInput
+                    },
+                    type: 'GET',
+                    datatype:'json',
+                    success: function(out) 
+                    {
+                         var j = jQuery.parseJSON(out);
+                         if(j.res.messagecode=="0")
+                         {
+                             //fb stuff 
+                             addr = j.res.street+", "+j.res.city+", "+j.res.state+"-"+j.res.zip;
+                             desc  = "Last Sold Price: "+j.res.LastSoldPrice+", 30 Days Overall Change: "+j.res.overallChangeSign+j.res.OverallChange;
+                             chart=j.charts['1yr'];
+                             homedetails = j.res.homedetails;
+                            //fb stuff
+                      
+                                  //---TABLE---
+                         
+                         var htmlstuff ="<div class='table-responsive'> <br/><table class='table table-striped' id='datatable' style='padding-left:30px'><tr><td colspan='3' id='header'>See more details for <a class='orlink' href='"+j.res.homedetails+"'>"+j.res.street+", "+j.res.city+", "+j.res.state+"-"+j.res.zip+"</a> on Zillow </td><td class='r'><a href='javascript:fb_post();'><img src = 'http://static.excelined.org/wp-content/uploads/Share-on-Facebook.png' id = 'share_button'/></a></td></tr>";
+                    
+                    //1st row with LSP case
+                     if(j.res.lastSoldPrice!="0.00")
+                     { htmlstuff+="<tr><td>Property Type:</td><td class='r'>"+j.res.PropertyType+"</td><td>Last Sold Price: </td><td  class='r'>"+j.res.LastSoldPrice+"</td></tr>";}
+                    else
+                    {htmlstuff+="<tr><td>Property Type:</td><td class='r'>"+j.res.PropertyType+"</td><td>Last Sold Price: </td><td>N/A</td></tr>";}
+                    
+                    //2nd row with LSD case
+                    if(j.res.lastSoldDate!="01-Jan-1970")
+                    { htmlstuff+="<tr><td>Year Built:</td><td class='r'>"+j.res.YearBuilt+"</td><td>Last Sold Date: </td><td class='r'>"+j.res.LastSoldDate+"</td></tr>";}
+                    else
+                    {htmlstuff+="<tr><td>Year Built:</td><td class='r'>"+j.res.YearBuilt+"</td><td>Last Sold Date: </td><td>N/A</td></tr>";}
+                    
+                     //3rd row with date display                 
+                    htmlstuff+="<tr><td>Lot Size:</td><td class='r'>"+j.res.LotSize+"</td><td>Zestimate &reg Property Estimate as of "+j.res.pzestdate+": </td><td class='r'>"+j.res.propzestimate+"</td></tr>";
+                    
+                    // 4 row with pic
+                   
+                    if(j.res.overallChangeSign=="+")
+                    {htmlstuff += "<tr><td>Finished Area : </td><td class='r'>"+j.res.FinishedArea+"</td><td>30 Days Overall Change: </td><td class='r'><img src='"+j.res.imgp+"'/> "+j.res.OverallChange+"</td></tr>";}
+                    else if(j.res.overallChangeSign=="-")
+                   {htmlstuff += "<tr><td>Finished Area : </td><td class='r'>"+j.res.FinishedArea+"</td><td>30 Days Overall Change: </td><td class='r'><img src='"+j.res.imgn+"'/> "+j.res.OverallChange+"</td></tr>";}
+                    else
+                    {htmlstuff += "<tr><td>Finished Area : </td><td class='r'>"+j.res.FinishedArea+"</td><td>30 Days Overall Change: </td><td class='r'> "+j.res.OverallChange+"</td></tr>";}
+                    
+                    // 5 row with range
+                    htmlstuff+="<tr><td>Bathrooms:</td><td class='r'>"+j.res.Bathrooms+"</td><td>All Time Property Range: </td><td class='r'>"+j.res.propRangelow+" - "+j.res.propRangehigh+"</td></tr>";
+                    
+                    //6 row with date 
+                    htmlstuff+=" <tr><td>Bedrooms:</td><td class='r'>"+j.res.Bedrooms+"</td><td>Rent Zestimate &reg Rent Valuation as of "+j.res.rentzestimateDate+": </td><td class='r'>"+j.res.rentzestimate+"</td></tr>";
+                    
+                    //7 row with pic 
+                   //htmlstuff+=" ";
+                    if (j.res.RentChangesign=="-")
+                    {htmlstuff+="<tr><td>Tax Assessment Year:</td><td class='r'>"+j.res.TaxAssessmentYear+"</td><td>30 Days Rent Change: </td><td class='r'><img src='http://cs-server.usc.edu:45678/hw/hw6/down_r.gif'> "+j.res.RentChange+"</td></tr>";}
+                    else if (j.res.RentChangesign=="+")
+                    {htmlstuff+="<tr><td>Tax Assessment Year:</td><td class='r'>"+j.res.TaxAssessmentYear+"</td><td>30 Days Rent Change: </td><td class='r'><img src='http://cs-server.usc.edu:45678/hw/hw6/up_g.gif'> "+j.res.RentChange+"</td></tr>";}
+                    else
+                    {htmlstuff+="<tr><td>Tax Assessment Year:</td><td class='r'>"+j.res.TaxAssessmentYear+"</td><td>30 Days Rent Change: </td><td class='r'>"+j.res.RentChange+"</td></tr>";}
+                    
+                    //8 row with range 
+                   htmlstuff+="<tr><td>Tax Assessment:</td><td class='r'>"+j.res.TaxAssessment+"</td><td>All Time Rent Range: </td><td class='r'>"+j.res.rentRangelow+" - "+j.res.rentRangehigh+"</td></tr></table>";
+               
+                    
+     document.getElementById("basic").innerHTML= htmlstuff;
+                           
+        //////--------CHART STUFF-------
+                   
+                     var chartstuff= '<div id="carousel-example-generic" class="carousel slide" data-interval="3000" data-ride="carousel">';
+                      // Indicators -->
+                     chartstuff += '<ol class="carousel-indicators"><li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li><li data-target="#carousel-example-generic" data-slide-to="1"></li><li data-target="#carousel-example-generic" data-slide-to="2"></li></ol>';
+                     
+                     //Wrapper for slides 
+                     
+                     chartstuff+='<div class="carousel-inner">';
+                     //1st
+                     chartstuff+='<div class="item active"><center><img src="'+j.charts['1yr']+'" alt="1 year Chart"></center><div class="carousel-caption"><h3>Historical Zestimates for the past 1 year</h3><p>'+j.res.street+', '+j.res.city+', '+j.res.state+'-'+j.res.zip+'</p></div></div>';
+                     
+                     //2nd
+                     chartstuff+='<div class="item"><center><img src="'+j.charts['5yr']+'" alt="5 year Chart"></center><div class="carousel-caption"><h3>Historical Zestimates for the past 5 years</h3><p>'+j.res.street+', '+j.res.city+', '+j.res.state+'-'+j.res.zip+'</p></div></div>';
+                     
+                     //3rd
+                     chartstuff+='<div class="item"><center><img src="'+j.charts['10yr']+'" alt="10 year Chart"></center><div class="carousel-caption"><h3>Historical Zestimates for the past 10 years</h3><p>'+j.res.street+', '+j.res.city+', '+j.res.state+'-'+j.res.zip+'</p></div></div>';
+                     //Controls
+                     chartstuff+='<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>';
+                     document.getElementById("histcharts").innerHTML=chartstuff;
+                     
+                     
+                     /////---FOOTER --
+                     
+                     var footstuff='<p style="text-align: center; color:white; ">&copy Zillow  Inc. 2006-2014. Use is subject to <a class="orlink" href="http://www.zillow.com/corp/Terms.htm">Terms of Use</a><br><a class="orlink" href="http://www.zillow.com/zestimate/">What&#39s a Zestimate?</a></p>';//should come outside if else
+      
+                     document.getElementById("foot").innerHTML= footstuff;
+                     
+                     $('#Datae').show();
+                     $('#Errop').hide();
+                 }
+                    
+                else
+                {
+                    var htmlerr="<br/><h4>No exact match found -- Verify that the given address is correct<h4><br/>";
+                    document.getElementById("Errop").innerHTML= htmlerr;
+                    $('#Errop').show();
+                    $('#Datae').hide();
+                }
+                 
+            },//end success
+            
+            error: function()
+            {
+             alert("Error in AJAX!");
+            }//end error
+                    
+            });//end ajax
+        }//end submit handler
+               
+       }); // end validate
+    
+    }); //end doc ready 
+    
+//==================FB STUFF START=========================
+ function fb_post(){
+    FB.ui(
+          {
+              method: 'feed',
+              name: addr,
+              caption: "Property Information from Zillow.com",
+              description: desc,
+              display: 'popup',
+              link: homedetails,
+              picture: chart,
+           },
+        
+        function(response){
+            if(response && response.post_id)
+                {alert("Posted Successfully to Facebook");}
+            else
+                {alert("Not Posted to Facebook");}
+           }
+      );//end FB ui
+    } //fb_post
+</script>
+        
+</head>
+    
+<body>
+   <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1014577675234938',
+      xfbml      : true,
+      version    : 'v2.1'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+     
+    <!--PROPER HTML-->
+    <h2 style="margin:30px; color:orange">Search Your Property Here</h2>
+    <div id="formdiv">
+        <form class="form-inline" role="form" id="houseform" method="get" onsubmit="return false;">
+            
+            <div class="form-group"> <!--StrAddr div-->
+            <label for="streetInput">Street Address*:</label>
+            <input type="text" class="form-control" placeholder="Address" id="streetInput" name="streetInput" autocomplete="on">
+        </div>
+            
+            <div class="form-group"> <!--city div-->
+            <label for="cityInput">City*:</label>
+            <input type="text" class="form-control" placeholder="City" id="cityInput" name="cityInput" autocomplete="on">
+        </div>
+            
+            <div class="form-group" style="width:135px;"> <!--State div-->
+            <label for="stateInput" style="margin-left: 10px;">State*:</label>
+            <select type="state" class="form-control" id="stateInput" name="stateInput">
+                <option value=""> </option>
+                <option value="AK">AK</option>
+                <option value="AL">AL</option>
+                <option value="AR">AR</option>
+                <option value="AZ">AZ</option>
+                <option value="CA">CA</option>
+
+                <option value="CO">CO</option>
+                <option value="CT">CT</option>
+                <option value="DC">DC</option>
+                <option value="DE">DE</option>
+
+                <option value="FL">FL</option>
+                <option value="GA">GA</option>
+                <option value="HI">HI</option>
+                <option value="IA">IA</option>
+
+                <option value="ID">ID</option>
+                <option value="IL">IL</option>
+                <option value="IN">IN</option>
+                <option value="KS">KS</option>
+
+                <option value="KY">KY</option>
+                <option value="LA">LA</option>
+                <option value="MA">MA</option>
+                <option value="MD">MD</option>
+
+                <option value="ME">ME</option>
+                <option value="MI">MI</option>
+                <option value="MN">MN</option>
+                <option value="MO">MO</option>
+
+                <option value="MS">MS</option>
+                <option value="MT">MT</option>
+                <option value="NC">NC</option>
+                <option value="ND">ND</option>
+
+                <option value="NE">NE</option>
+                <option value="NH">NH</option>
+                <option value="NJ">NJ</option>
+                <option value="NM">NM</option>
+
+                <option value="NV">NV</option>
+                <option value="NY">NY</option>
+                <option value="OH">OH</option>
+                <option value="OK">OK</option>
+
+                <option value="OR">OR</option>
+                <option value="PA">PA</option>
+                <option value="RI">RI</option>
+                <option value="SC">SC</option>
+
+                <option value="SD">SD</option>
+                <option value="TN">TN</option>
+                <option value="TX">TX</option>
+                <option value="UT">UT</option>
+
+                <option value="VA">VA</option>
+                <option value="VT">VT</option>
+                <option value="WA">WA</option>
+                <option value="WI">WI</option>
+
+                <option value="WV">WV</option>
+                <option value="WY">WY</option>
+                
+                </select>
+        </div>  <!--end statei/p div-->
+            
+            <div class="form-group">
+                <input class="btn btn-warning" style="background-color:orange;" type="submit" value="Submit"  name="submit"></input>
+            </div> <!--end SUBMIT div-->
+        
+        <a href="http://zillow.com"><img src="http://www.zillow.com/widgets/GetVersionedResource.htm?path=/static/logos/Zillowlogo_150x40_rounded.gif" width="150" height="40" alt="Zillow Real Estate Search" style="position: absolute; right: 75px;" /></a>
+        </form> <!--end form-->
+    
+    </div><!--end formdiv-->
+    <br><br>
+    <hr>
+    <br>
+    
+        <!--div for zillow errors-->
+    <div id="Errop" style="display:none;"></div><!--end Errop div-->
+        
+        <!--div with proper o/p - tabs n all dat jazz-->
+    <div id="Datae" style="display:none;">   
+    <!--<div id="basic"></div><!--end basicdiv-->
+        <ul class="nav nav-tabs" role="tablist" id="letabs">
+            <li class="active"><a href="#basic" data-toggle="tab">Basic Info</a></li>
+            <li><a href="#histcharts" data-toggle="tab">Historical Zestimates</a></li>
+      </ul>
+            
+            <div id="tabinfo" class="tab-content">
+               <div class="tab-pane fade in active" id="basic" style="background-color: white; overflow:auto; border-radius: 0px 0px 5px 5px;"></div>
+                <div class="tab-pane fade" id="histcharts" style="background-color: white ; overflow:auto; border-radius: 0px 0px 5px 5px;"></div>
+            </div><!--end tab info div-->
+    </div><!--end Datae div-->
+    
+    <div id="foot"></div><!--end footer div-->
+    
+    
+    
+     
+</body>
+</html>

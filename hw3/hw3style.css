@@ -1,0 +1,118 @@
+body   
+{
+    font-family:"Arial",sans-serif;
+    background-color:rgb(245,245,245);
+    margin-left:77px;
+}
+
+h1
+{
+    font-size:1.675em;
+    letter-spacing: 0.2px;
+  
+}
+
+#box1
+ {
+  background-color:white;
+  border:1px solid rgb(231,231,231);
+  border-radius: 5px;
+   /*<!--103,68,68-->*/
+  padding: 20px 58px 47px 37px;
+  /*text-align: justify;*/
+  height:100px;
+  width:290px;
+  margin-bottom: 10px;  
+  }
+
+p
+{
+    /*letter spacing:-3px;*/
+    font-weight:100;
+    font-family: "Arial Narrow",sans-serif;
+    color: rgb(68,68,68);
+   
+}
+
+b
+{
+    letter spacing:"initial"; 
+    color:black;
+    font-weight:bold;
+    font-family:"Arial",sans-serif;
+}
+
+    
+
+select
+{
+    border:1px solid rgb(184,184,184);
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -moz-box-shadow: inset 0px 2px 2px 0px #dfdfdf;
+     box-shadow: inset 0px 2px 2px 0px #dfdfdf;
+    font-size:15px;
+    color:rgb(185,185,185);
+    padding:9px 97px 8px 9px;
+    margin-bottom: 15px;
+}
+
+#digits
+{ 
+    border:1px solid rgb(184,184,184);
+    border-radius:4px;
+    -moz-border-radius:4px;
+    box-shadow: inset -2px 2px 2px 0px #dfdfdf;
+    -moz-box-shadow: inset -2px 2px 2px 0px #dfdfdf;
+    font-size:24px;
+    width: 218px;
+    height: 40px;
+    /*154px;
+    height: 27px;
+    padding:4px 0px 8px 11px;*/
+    padding-left: 12px;
+    margin-bottom: 15px;
+ }
+
+
+#buttonz
+{
+    display: inline;
+    text-decoration: none;
+    text-align: center;
+}
+
+.but1
+{
+    appearance:button;
+    border:1px solid rgb(75,75,75);
+    border-radius:5px;
+    background: -moz-linear-gradient(top,rgb(104,104,104), rgb(75,75,75));
+    font-family: sans-serif;
+    font-size: 14px;
+    font: Arial;
+    text-shadow: 1px 1px black;
+    text-decoration: none;
+    color:white;
+    padding: 1.25% 2.5% 1.25% 2.5%;
+    margin-right: 18px;
+}
+
+
+.but2
+{
+    appearance:button;
+    /*display: inline-block;*/
+    border:1px solid rgb(82,38,117); 
+    border-radius:2px;
+    background-color:rgb(110,50,157);
+    color:white;
+    font-family: sans-serif;
+    font-size: 16.5px;
+    letter-spacing: -0.3px;
+    font-weight: bold;
+    font-family:"Arial Unicode MS";
+    text-decoration: none;
+    /*text-shadow: -0.5px 0px white;*/
+    padding: 0.70% 2.7% 0.70% 2.7%;
+}

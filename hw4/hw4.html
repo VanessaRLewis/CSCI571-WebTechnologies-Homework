@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input</title>
+    <script>
+       function generateHTML(xmlDoc)
+        {
+            ELEMENT_NODE = 1;    // MS parser doesn't define Node.ELEMENT_NODE
+            root=xmlDoc.DocumentElement;
+            html_text="<html><head><title>Real Estate Listings</title></head><body>";
+            html_text+="<h1>Real Estate Listings</h1>";
+            lis=xmlDoc.getElementsByTagName("Listing");
+            
+            lischNodeList=lis.item(0).childNodes;
+            
+            html_text+="<table border='2'>";
+            html_text+="<tbody>";
+            
+        
+            for(i=0;i<lis.length;i++)
+            {
+                lischNodeList=lis.item(i).childNodes; // get loc n det
+                html_text+="<tr>";
+                html_text+="<tr><th colspan='7'>Listing</th></tr>";
+                
+                for(j=0;j<lischNodeList.length;j++)
+                { 
+                    //html_text="<tr><th>"+j+"</th>";
+                    
+                    if ((lischNodeList.item(j).nodeType==ELEMENT_NODE)&&(lischNodeList.item(j).nodeName=="Location"))
+                            { 
+                                html_text+="<th>Location</th><th>Street</th><th>City</th><th>State</th><th>Zip</th><th>Lat</th><th>Long</th></tr>";
+                                html_text+="<td>&nbsp</td>";
+                                
+                                locchNodeList=lischNodeList.item(j).childNodes;
+                                for(k=0;k<locchNodeList.length;k++)
+                                    {
+                                        if(locchNodeList.item(k).nodeType==ELEMENT_NODE)
+                                            {html_text+="<td>"+locchNodeList.item(k).firstChild.nodeValue+"</td>"; }
+                                    }
+                                html_text+="</tr>";
+                            }//end of if
+                    
+                    else if ((lischNodeList.item(j).nodeType==ELEMENT_NODE)&&(lischNodeList.item(j).nodeName=="ListingDetails"))
+                        {
+                            html_text+="<tr><th>Details</th><th>Status</th><th>Price</th><th>Listing URL</th><th colspan='3'>Image</th></tr>";
+                            html_text+="<tr><td>&nbsp</td>";
+                            detchNodeList=lischNodeList.item(j).childNodes;
+                            for(m=0;m<detchNodeList.length;m++)
+                                {
+                                    if(detchNodeList.item(m).nodeType==ELEMENT_NODE)
+                                        {
+                                           if (detchNodeList.item(m).nodeName=="ListingUrl")
+                                           {//handle urls separately
+                                              html_text+="<td><a href='"+detchNodeList.item(m).firstChild.nodeValue+"'>Link to listing</a></td>"; 
+                                           }
+                                            
+                                            
+                                            else if (detchNodeList.item(m).nodeName=="Image")
+                                           {//handle images separately
+                                               x=270; y=270;
+                                               html_text+="<td colspan='3'><img src='"+detchNodeList.item(m).firstChild.nodeValue+"' width='"+x+"' height='"+y+"'></td>"; 
+                                           }
+                                            
+                                                                                     
+                                           else 
+                                           {
+                                               html_text+="<td>"+detchNodeList.item(m).firstChild.nodeValue+"</td>";
+                                           }//end of else
+                                        }//end of ele else
+                                }//end of m loop
+                            html_text+="</tr>";
+                        }//end of details else 
+                }//end of j loop 
+              
+            }//end of i
+            html_text+="</tbody>"; 
+            html_text+="</table>";
+            html_text+="</bo>";
+            html_text+="<dy>"
+            html_text+="</html>";
+        } //end of generate html function
+        
+        
+function viewXML(what)
+{
+    
+    var URL = what.URL.value;
+    if(!URL)
+    {hWin=window.alert("URL not entered");}
+    else
+    {
+        function loadXML(url)
+        {
+            if (window.XMLHttpRequest) // code for IE7+, Firefox, Chrome, Opera, Safari
+            {xmlhttp=new XMLHttpRequest();}
+            else // code for IE6, IE5
+                {xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");  }
+            xmlhttp.open("GET",url,false);
+            xmlhttp.send();
+            if((xmlhttp.status==404)&&(xmlhttp.status!=4))
+                hWin=window.alert("Invalid URL");
+            else
+                {
+                    xmlDoc=xmlhttp.responseXML;
+                    return xmlDoc;
+                }
+        }
+        xmlDoc = loadXML(URL);
+        if (window.ActiveXObject)
+            {  //if IE, simply execute script (due to async prop).
+                if (xmlDoc.parseError.errorCode != 0)
+                    {
+                        var myErr = xmlDoc.parseError;
+                        //document.write(myErr);
+                        generateError(xmlDoc);
+                        hWin = window.open("", "Error", "height=300,width=340");
+                        hWin.document.write(html_text);
+                    } 
+                else 
+                    {  
+                        generateHTML(xmlDoc);
+                        hWin = window.open("", "HW4", "height=800,width=600,scrollbars=1");
+                        hWin.document.write(html_text);
+                    }
+            } 
+        
+        else //else if FF, execute script once XML object has loaded
+            {  
+               if(xmlDoc.documentElement.nodeName == "parsererror")
+                {
+                    errStr = xmlDoc.documentElement.childNodes[0].nodeValue;
+                    errStr = errStr.replace(/</g, "&lt;");
+                    hwin=window.alert("Error in XML File");         
+                }
+                else
+                {
+                    lis=xmlDoc.getElementsByTagName("Listing");
+                    if(lis.length==0)
+                        hwin=window.alert("Real Estate Listings not found");
+                    else
+                    {
+                        xmlDoc.onload=generateHTML(xmlDoc);
+                        hWin = window.open("", "HW4", "height=800,width=600,scrollbars=1");
+                        hWin.document.write(html_text);
+                    }
+                }
+            }
+        hWin.document.close(); 
+        }
+    } //eo viewXML func
+</script>       
+    </head>
+    
+    <body>
+        <div align="center">
+        <h2>Enter the URL for Real Estate Catalog XML File</h2>
+        <form name="myform" method="POST" id="location">
+            <input type="text" name="URL" maxlength="255" size="100"/>
+            <br/><br/>
+            <input type="button" name="submit" value="Submit Query" onClick="viewXML(this.form)"/>
+        </form>
+     </div>
+    <noscript>
+    </body>
+</html>
